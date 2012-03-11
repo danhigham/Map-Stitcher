@@ -8,7 +8,30 @@
 </head>
 <body>
 
-<%= yield %>
+<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Map Stitcher</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="/">Stiches</a></li>
+              <li><a href="/map_stitching/new">New Stitch</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="content">
+        <%= yield %>
+      </div>
+    </div>
 
 </body>
 </html>

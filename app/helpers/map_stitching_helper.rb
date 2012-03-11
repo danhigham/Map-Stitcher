@@ -1,0 +1,2 @@
+module MapStitchingHelper
+end

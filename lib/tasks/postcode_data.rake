@@ -7,11 +7,13 @@ namespace :map_stitcher do
   task :import_postcode_data  => :environment do
   	data_dir = "/Users/danhigham/Downloads/Code-Point Open/Data"
 
+    Postcode.destroy_all
+
   	Dir.entries(data_dir).grep(/.csv$/).each { |x| 
   		file_path = "#{data_dir}/#{x}"
 
   		CSV.foreach(file_path) do |line|
-  			postcode = line[0]
+  			postcode = line[0].gsub " ","" 
   			easting = line[2].to_i
   			northing = line[3].to_i
 

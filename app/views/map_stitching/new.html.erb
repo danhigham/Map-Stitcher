@@ -1,0 +1,25 @@
+<div class="page-header">
+	<h1>New Stitching <small>Create a new map stitching for a UK postcode</small></h1>
+</div>
+
+<%= form_for @stitching, :url => { :action => "create" }, :html => {:class => "well"} do |f| %>
+  <div class="row">
+    <div class="span3">
+    	<label>Postcode</label>
+    	<%= f.text_field :postcode_text %>
+    	<label>Zoom level</label>
+        <div id="zoom-slider" class="dragdealer">
+            <div class="red-bar handle"></div>
+        </div>
+        <%= f.hidden_field :zoom_level %>
+    	<label>Comment</label>
+    	<%= f.text_area :comment, :size => "80x6" %>
+    	<%= f.submit "Create", :class => "btn-success" %>
+    </div>
+    <div class="span7">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut adipiscing, sem sed pellentesque eleifend, odio turpis vulputate augue, tincidunt imperdiet magna lacus a quam. Cras condimentum neque eget sem viverra ac pulvinar mi tempor. Etiam at metus nec augue tempor fermentum. Phasellus et nulla non ante ultrices bibendum. Sed dictum accumsan blandit. Aenean ullamcorper congue lacus, consequat tempor orci euismod sit amet. Cras metus ligula, pharetra eget consectetur eget, aliquet quis purus. 
+      </p>
+    </div>
+  </div>
+<% end %>

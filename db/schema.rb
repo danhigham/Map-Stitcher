@@ -11,7 +11,33 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120308211810) do
+ActiveRecord::Schema.define(:version => 20120309195924) do
+
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
+  create_table "map_stitchings", :force => true do |t|
+    t.integer  "postcode_id"
+    t.string   "thumbnail_url"
+    t.string   "image_url"
+    t.string   "comment"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "zoom_level"
+  end
 
   create_table "postcodes", :force => true do |t|
     t.string   "postcode"
@@ -22,5 +48,6 @@ ActiveRecord::Schema.define(:version => 20120308211810) do
   end
 
   add_index "postcodes", ["latitude", "longitude"], :name => "index_postcodes_on_latitude_and_longitude"
+  add_index "postcodes", ["postcode"], :name => "index_postcodes_on_postcode"
 
 end

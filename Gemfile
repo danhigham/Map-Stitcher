@@ -6,6 +6,10 @@ gem 'rails', '3.2.0'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'mysql2'
+gem 'unicorn'
+gem 'delayed_job_active_record'
+gem 'aws-s3'
+gem 'rmagick'
 
 group :development do
   gem 'fastercsv'
