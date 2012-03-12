@@ -1,7 +1,7 @@
 class MapStitchingController < ApplicationController
 
 	def index
-
+		@stitches = MapStitching.where('thumbnail_url is not null').paginate(:page => params[:page], :per_page => 6)
 	end
 
 	def new

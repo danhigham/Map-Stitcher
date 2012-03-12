@@ -10,6 +10,8 @@ gem 'unicorn'
 gem 'delayed_job_active_record'
 gem 'aws-s3'
 gem 'rmagick'
+gem 'uuidtools'
+gem 'will_paginate'
 
 group :development do
   gem 'fastercsv'

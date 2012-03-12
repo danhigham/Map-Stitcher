@@ -1,0 +1,11 @@
+<ul id="stitches">
+	<% @stitches.each do |s| %>
+		<li>
+			<img src="<%= s.thumbnail_url %>" /><br />
+			<span class="description"><%= s.postcode.postcode %></span>
+			<span class="description"><%= s.comment %></span>
+		</li>	
+	<% end %>
+</ul>
+
+<%= will_paginate @stitches, :class=>'pagination pull-right' %>

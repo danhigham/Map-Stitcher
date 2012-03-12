@@ -116,6 +116,8 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    uuidtools (2.1.2)
+    will_paginate (3.0.3)
     xml-simple (1.1.1)
 
 PLATFORMS
@@ -134,3 +136,5 @@ DEPENDENCIES
   sass-rails (~> 3.2.3)
   uglifier (>= 1.0.3)
   unicorn
+  uuidtools
+  will_paginate

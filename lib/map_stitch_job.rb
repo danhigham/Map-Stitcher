@@ -1,10 +1,14 @@
+require 'aws/s3'
+require 'open-uri'
 
 class MapStitchJob < Struct.new(:map_stitch_id)
 
 	include Magick
+	include AWS::S3
 
 	ZOOM_STITCH_SIZE_RATIO = 1.0
 	TILE_SIZE = 256
+	S3_BUCKET_NAME = 'MAP_STITCHES'
 
 	def perform
 
@@ -31,6 +35,8 @@ class MapStitchJob < Struct.new(:map_stitch_id)
 
 		cols = rows = (ZOOM_STITCH_SIZE_RATIO * zoom).to_i
 
+		puts "Downloading tiles"
+
 		(1.upto rows).each do |y|
 
 			(1.upto cols).each do |x|
@@ -47,10 +53,25 @@ class MapStitchJob < Struct.new(:map_stitch_id)
 
 		join_tiles(cols, rows, temp_path)
 
+		puts "Connecting to S3"
+
 		# upload to S3 bucket
+		s3_connection = AWS::S3::Base.establish_connection! :access_key_id => ENV['AMAZON_ACCESS_KEY_ID'], :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY']
+
+		puts "Uploading thumb to S3"
+
+		# Store the temparary file in s3 bucket
+		thumb_guid = UUIDTools::UUID.random_create
+		thumb_s3_obj = S3Object.store("#{thumb_guid}.png", open("#{temp_path}/stitch-thumb.png"), S3_BUCKET_NAME, :access => :public_read)
+
+		puts "Uploading main to S3"
 		
+		main_guid = UUIDTools::UUID.random_create
+		main_s3_obj = S3Object.store("#{main_guid}.png", open("#{temp_path}/stitch.jpg"), S3_BUCKET_NAME, :access => :public_read)
 
 		# record URL to map_stitch
+		stitching.update_attributes :image_url => S3Object.url_for("#{main_guid}.png", S3_BUCKET_NAME).match(/^.+\.(png|jpg)?/)[0], 
+			:thumbnail_url => S3Object.url_for("#{thumb_guid}.png", S3_BUCKET_NAME).match(/^.+\.(png|jpg)?/)[0]
 
 	end
 
@@ -73,15 +94,17 @@ class MapStitchJob < Struct.new(:map_stitch_id)
 
 		end
 
-		ilg.append(true).write("#{path}/out.png")
+		image = ilg.append(true)
+
+		main = image.resize_to_fill(1600, 1600)
+		main.write("#{path}/stitch.jpg")
+
+		thumb = image.resize_to_fit(350, 350)
+		thumb.write("#{path}/stitch-thumb.png")
 
 	end
 
-	def download full_url, to_here
-
-    require 'open-uri'
-
-    puts "Downloading #{full_url}"
+	def download full_url, to_here	
 
     writeOut = open(to_here, "wb")
     writeOut.write(open(full_url).read)
